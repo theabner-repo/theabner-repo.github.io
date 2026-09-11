@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abner — init(with mentor:)</title>
+<meta name="description" content="Preparación 1:1 para entrevistas técnicas, guiada por un ingeniero iOS con +9 años de experiencia real. Sin IA. Sin bots.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2312141C'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle' fill='%23E8A33D' font-family='monospace'%3E%7B%7D%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12141c;
+    --bg-panel: #1b1e2b;
+    --bg-panel-2: #212437;
+    --line: rgba(255,255,255,.09);
+    --line-soft: rgba(255,255,255,.05);
+    --text: #edebe4;
+    --text-dim: #9aa0b4;
+    --text-faint: #656c82;
+    --amber: #e8a33d;
+    --amber-soft: rgba(232,163,61,.14);
+    --violet: #8b98f7;
+    --sage: #86b596;
+    --sage-soft: rgba(134,181,150,.12);
+    --radius: 14px;
+    --maxw: 1120px;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Manrope', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{ display:block; max-width:100%; }
+  a{ color:inherit; }
+  ::selection{ background:var(--amber-soft); color:var(--amber); }
+
+  :focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  h1,h2,h3{
+    font-family:var(--font-display);
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  p{ margin:0; }
+
+  .section{ padding:104px 0; }
+  .section + .section{ border-top:1px solid var(--line-soft); }
+  @media (max-width:720px){ .section{ padding:72px 0; } }
+
+  .kicker{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--text-faint);
+    margin-bottom:18px;
+  }
+
+  .lede{
+    font-size:19px;
+    color:var(--text-dim);
+    max-width:620px;
+    line-height:1.7;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:40;
+    background:rgba(18,20,28,.78);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .topbar .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+  }
+  .topbar .name{
+    font-family:var(--font-mono);
+    font-size:15px;
+    color:var(--text);
+  }
+  .topbar .name span{ color:var(--text-faint); }
+  .btn-ghost{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:14px;
+    color:var(--text);
+    background:transparent;
+    border:1px solid var(--line);
+    padding:9px 18px;
+    border-radius:999px;
+    cursor:pointer;
+    text-decoration:none;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .btn-ghost:hover{ border-color:var(--amber); background:var(--amber-soft); }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:88px 0 96px;
+    overflow:hidden;
+  }
+  .hero-glow{
+    position:absolute;
+    top:-220px; right:-160px;
+    width:640px; height:640px;
+    background:radial-gradient(circle, rgba(232,163,61,.16) 0%, rgba(139,152,247,.10) 42%, transparent 70%);
+    filter:blur(10px);
+    animation:drift 26s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes drift{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(-40px, 50px) scale(1.08); }
+  }
+  .hero-grid{
+    position:relative;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:44px;
+  }
+  .hero h1.tagline{
+    font-size:clamp(26px, 3.4vw, 34px);
+    line-height:1.28;
+    color:var(--text);
+    max-width:640px;
+    margin-top:22px;
+  }
+  .hero .sub{
+    margin-top:20px;
+    color:var(--text-dim);
+    max-width:520px;
+    font-size:16.5px;
+  }
+  .hero-ctas{ display:flex; gap:14px; margin-top:32px; flex-wrap:wrap; }
+
+  .btn-primary{
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:15px;
+    color:#1a1206;
+    background:var(--amber);
+    border:none;
+    padding:14px 26px;
+    border-radius:10px;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 10px 26px -8px rgba(232,163,61,.55); }
+
+  .btn-secondary{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:15px;
+    color:var(--text);
+    background:transparent;
+    border:1px solid var(--line);
+    padding:13px 24px;
+    border-radius:10px;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+    transition:border-color .18s ease, background .18s ease;
+  }
+  .btn-secondary:hover{ border-color:var(--violet); background:rgba(139,152,247,.08); }
+
+  /* editor window */
+  .editor{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:0 40px 80px -40px rgba(0,0,0,.6);
+    overflow:hidden;
+  }
+  .editor-bar{
+    display:flex; align-items:center; gap:8px;
+    padding:12px 16px;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--line);
+  }
+  .dot{ width:11px; height:11px; border-radius:50%; }
+  .dot.r{ background:#e5645a; }
+  .dot.y{ background:#e0b04b; }
+  .dot.g{ background:#5cb87a; }
+  .editor-file{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--text-faint);
+    margin-left:10px;
+  }
+  .editor-body{
+    display:flex;
+    font-family:var(--font-mono);
+    font-size:15.5px;
+    line-height:2;
+    padding:22px 0;
+  }
+  .gutter{
+    padding:0 18px;
+    color:var(--text-faint);
+    text-align:right;
+    user-select:none;
+    border-right:1px solid var(--line-soft);
+  }
+  .code{ padding:0 22px; min-width:0; }
+  .code .ln{ white-space:pre-wrap; opacity:0; }
+  .code .ln.show{ animation:reveal .5s ease forwards; }
+  @keyframes reveal{ from{ opacity:0; transform:translateY(4px);} to{ opacity:1; transform:translateY(0);} }
+  .tok-comment{ color:var(--sage); }
+  .tok-kw{ color:var(--violet); }
+  .tok-val{ color:var(--amber); }
+  .tok-plain{ color:var(--text-dim); }
+  .cursor{
+    display:inline-block;
+    width:8px; height:1.05em;
+    background:var(--amber);
+    vertical-align:text-bottom;
+    margin-left:2px;
+    animation:blink 1s step-end infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* ---------- About me ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:64px;
+    align-items:start;
+  }
+  @media (max-width:860px){ .about-grid{ grid-template-columns:1fr; gap:40px; } }
+
+  .about-body p{ color:var(--text-dim); font-size:16.5px; margin-bottom:18px; }
+  .about-body strong{ color:var(--text); font-weight:700; }
+
+  .array-block{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px 24px;
+    font-family:var(--font-mono);
+    font-size:14.5px;
+    line-height:1.9;
+    margin-bottom:18px;
+  }
+  .array-block .k{ color:var(--violet); }
+  .array-block .arr{ color:var(--text-dim); }
+  .array-block .str{ color:var(--sage); }
+  .array-label{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--text-faint);
+    margin-bottom:10px;
+  }
+
+  /* ---------- Program ---------- */
+  .comment-line{
+    font-family:var(--font-mono);
+    font-weight:600;
+    font-size:clamp(24px, 3.8vw, 38px);
+    color:var(--sage);
+    line-height:1.4;
+    margin:28px 0 24px;
+  }
+  .pullquote{
+    font-family:var(--font-display);
+    font-style:normal;
+    font-size:20px;
+    color:var(--text);
+    border-left:2px solid var(--violet);
+    padding-left:20px;
+    max-width:560px;
+  }
+
+  /* ---------- How it works (pipeline) ---------- */
+  .pipeline{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:0;
+    margin-top:52px;
+    position:relative;
+  }
+  @media (max-width:860px){
+    .pipeline{ grid-template-columns:1fr; gap:28px; }
+  }
+  .stage{
+    position:relative;
+    padding:0 20px 0 0;
+  }
+  .stage:not(:last-child)::after{
+    content:'';
+    position:absolute;
+    top:15px; right:0;
+    width:20px; height:1px;
+    background:var(--line);
+  }
+  @media (max-width:860px){
+    .stage:not(:last-child)::after{ display:none; }
+  }
+  .stage-num{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--amber);
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px;
+  }
+  .stage-num .node{
+    width:10px; height:10px; border-radius:50%;
+    background:var(--amber);
+    box-shadow:0 0 0 4px var(--amber-soft);
+  }
+  .stage h3{ font-size:17px; margin-bottom:8px; }
+  .stage p{ color:var(--text-dim); font-size:14.5px; line-height:1.6; }
+
+  /* ---------- Packages ---------- */
+  .founding-tag{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-mono); font-size:12.5px;
+    color:var(--amber);
+    background:var(--amber-soft);
+    border:1px solid rgba(232,163,61,.3);
+    padding:7px 14px; border-radius:999px;
+    margin-bottom:20px;
+  }
+
+  .pkg-flagship{
+    background:linear-gradient(160deg, var(--bg-panel-2), var(--bg-panel));
+    border:1px solid rgba(232,163,61,.35);
+    border-radius:var(--radius);
+    padding:36px;
+    margin-top:44px;
+    display:grid;
+    grid-template-columns:1.3fr .9fr;
+    gap:36px;
+    align-items:center;
+  }
+  @media (max-width:760px){ .pkg-flagship{ grid-template-columns:1fr; padding:26px; } }
+
+  .pkg-badge{
+    font-family:var(--font-mono); font-size:12px; color:var(--amber);
+    margin-bottom:10px;
+  }
+  .pkg-flagship h3{ font-size:26px; margin-bottom:10px; }
+  .pkg-cadence{
+    font-family:var(--font-mono); font-size:13px; color:var(--text-faint);
+    margin-bottom:16px;
+  }
+  .pkg-desc{ color:var(--text-dim); font-size:15.5px; margin-bottom:0; }
+  .pkg-price-box{
+    text-align:left;
+    border-left:1px solid var(--line);
+    padding-left:36px;
+  }
+  @media (max-width:760px){ .pkg-price-box{ border-left:none; border-top:1px solid var(--line); padding-left:0; padding-top:24px; } }
+  .price{ font-family:var(--font-display); font-size:36px; font-weight:700; color:var(--text); }
+  .price span{ font-family:var(--font-mono); font-size:14px; color:var(--text-faint); display:block; margin-top:4px; }
+  .pkg-price-box .btn-primary{ margin-top:20px; width:100%; text-align:center; }
+  .pp-form{ margin:0; width:100%; }
+  .pp-form button{ appearance:none; -webkit-appearance:none; width:100%; }
+
+  .pkg-row{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:22px;
+    margin-top:26px;
+  }
+  @media (max-width:860px){ .pkg-row{ grid-template-columns:1fr; } }
+
+  .pkg-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px;
+    display:flex; flex-direction:column;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .pkg-card:hover{ border-color:var(--violet); transform:translateY(-3px); }
+  .pkg-card h3{ font-size:19px; margin-bottom:8px; }
+  .pkg-card .pkg-desc{ font-size:14.5px; flex-grow:1; margin-bottom:22px; }
+  .pkg-card .price{ font-size:26px; }
+  .pkg-card .btn-secondary, .pkg-card .btn-primary{ width:100%; text-align:center; margin-top:10px; font-size:14px; padding:12px 20px; }
+
+  /* ---------- FAQ ---------- */
+  .faq-item{
+    border-bottom:1px solid var(--line-soft);
+  }
+  .faq-q{
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    color:var(--text);
+    font-family:var(--font-display);
+    font-size:17px;
+    font-weight:500;
+    padding:22px 0;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:20px;
+    cursor:pointer;
+  }
+  .faq-q .plus{
+    font-family:var(--font-mono);
+    color:var(--amber);
+    font-size:20px;
+    transition:transform .25s ease;
+    flex-shrink:0;
+  }
+  .faq-item.open .plus{ transform:rotate(45deg); }
+  .faq-a{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .3s ease;
+  }
+  .faq-item.open .faq-a{ grid-template-rows:1fr; }
+  .faq-a-inner{ overflow:hidden; }
+  .faq-a p{ color:var(--text-dim); font-size:15.5px; padding-bottom:24px; max-width:640px; line-height:1.7; }
+
+  /* ---------- Footer ---------- */
+  footer{ padding:64px 0 48px; }
+  .footer-grid{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+  }
+  .footer-name{ font-family:var(--font-mono); color:var(--text-dim); font-size:14px; }
+  .footer-links{ display:flex; gap:22px; }
+  .footer-links a{ color:var(--text-dim); font-size:14px; text-decoration:none; transition:color .2s; }
+  .footer-links a:hover{ color:var(--amber); }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-glow{ animation:none; }
+    .cursor{ animation:none; opacity:1; }
+    .code .ln{ opacity:1; animation:none; }
+    html{ scroll-behavior:auto; }
+    .pkg-card, .btn-primary{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="name">abner<span>.dev</span></div>
+    <a href="#paquetes" class="btn-ghost">Ver paquetes</a>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="kicker">Abner — mentoría técnica 1:1</div>
+
+      <div class="editor" style="max-width:640px;">
+        <div class="editor-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="editor-file">InterviewPrep.swift</span>
+        </div>
+        <div class="editor-body">
+          <div class="gutter"><div>1</div><div>2</div></div>
+          <div class="code">
+            <div class="ln show" style="animation-delay:.1s">
+              <span class="tok-comment">// De la compilación al runtime — preparación guiada hasta el día de tu entrevista.</span>
+            </div>
+            <div class="ln show" style="animation-delay:.7s">
+              <span class="tok-kw">init</span><span class="tok-plain">(with mentor: </span><span class="tok-val">Abner</span><span class="tok-plain">)</span><span class="cursor"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="hero sub">
+        Preparación 1:1 para tu próxima entrevista técnica, guiada por alguien que ya pasó por el proceso — no por una IA ni un guion genérico.
+      </p>
+      <div class="hero-ctas">
+        <a href="#paquetes" class="btn-primary">Ver los paquetes</a>
+        <a href="#programa" class="btn-secondary">Cómo funciona</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sobre-mi">
+  <div class="wrap about-grid">
+    <div class="about-body">
+      <div class="kicker">Quién te va a preparar</div>
+      <h2 style="font-size:clamp(24px,3vw,32px); margin-bottom:22px;">+9 años construyendo apps iOS en producción — y pasando por el mismo proceso que tú.</h2>
+      <p>He construido y lanzado apps dentro de equipos en Citibanamex, BBVA, Cinépolis, PayPal, Walmart y Zillow.</p>
+      <p>En el camino, también he estado del otro lado de la entrevista: procesos con Autodesk y Capital One, ofertas recibidas, negociaciones cerradas con éxito.</p>
+      <p>Conozco el proceso de reclutamiento porque lo he vivido una y otra vez — no como teoría, como experiencia repetida.</p>
+      <p>Puedes revisar el detalle completo de mi trayectoria en <a href="https://www.linkedin.com/in/abnercastro/" target="_blank" rel="noopener" style="color:var(--amber); text-decoration:underline; text-underline-offset:3px;">LinkedIn</a>.</p>
+    </div>
+    <div>
+      <div class="array-label">// empresas donde he construido software</div>
+      <div class="array-block">
+        <span class="k">let</span> companies <span class="tok-plain">=</span> <span class="arr">[</span><br>
+        &nbsp;&nbsp;<span class="str">"Citibanamex"</span>, <span class="str">"BBVA"</span>, <span class="str">"Cinépolis"</span>,<br>
+        &nbsp;&nbsp;<span class="str">"PayPal"</span>, <span class="str">"Walmart"</span>, <span class="str">"Zillow"</span><br>
+        <span class="arr">]</span>
+      </div>
+      <div class="array-label">// procesos y ofertas recibidas</div>
+      <div class="array-block">
+        <span class="k">let</span> offers <span class="tok-plain">=</span> <span class="arr">[</span><span class="str">"Autodesk"</span>, <span class="str">"Capital One"</span><span class="arr">]</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="programa">
+  <div class="wrap">
+    <div class="kicker">El programa</div>
+    <p class="lede">Sesiones en vivo — no grabadas, no automatizadas. Te acompaño según tus puntos fuertes y tus gaps: feedback en tiempo real, mock interviews en inglés si lo necesitas, revisión de código y razonamiento técnico, frente a frente.</p>
+    <div class="comment-line">// Sin IA. Sin bots.</div>
+    <p class="pullquote">Prepárate para la entrevista como se prepara una app para producción.</p>
+
+    <div class="pipeline">
+      <div class="stage">
+        <div class="stage-num"><span class="node"></span>01</div>
+        <h3>Selecciona</h3>
+        <p>Eliges el paquete que se ajusta a tu tiempo y a qué tan cerca está tu entrevista.</p>
+      </div>
+      <div class="stage">
+        <div class="stage-num"><span class="node"></span>02</div>
+        <h3>Agenda</h3>
+        <p>Tras confirmar tu pago, recibes el link para reservar tu sesión en el horario que te convenga.</p>
+      </div>
+      <div class="stage">
+        <div class="stage-num"><span class="node"></span>03</div>
+        <h3>Sesión en vivo</h3>
+        <p>1:1, con feedback en tiempo real sobre lo que dijiste, cómo lo dijiste y qué reforzar.</p>
+      </div>
+      <div class="stage">
+        <div class="stage-num"><span class="node"></span>04</div>
+        <h3>Plan de seguimiento</h3>
+        <p>Sales con claridad de qué trabajar antes de la siguiente sesión o de tu entrevista real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="paquetes">
+  <div class="wrap">
+    <div class="kicker">Paquetes</div>
+    <h2 style="font-size:clamp(26px,3.2vw,34px);">Elige según qué tan cerca está tu entrevista.</h2>
+    <span class="founding-tag">Cohorte de lanzamiento — cupos limitados</span>
+
+    <div class="pkg-flagship">
+      <div>
+        <div class="pkg-badge">El más completo</div>
+        <h3>Acompañamiento Integral</h3>
+        <div class="pkg-cadence">2 sesiones / semana · 6 semanas</div>
+        <p class="pkg-desc">Cobertura completa + presencia continua entre sesiones — el nivel más cercano a tener un mentor de planta.</p>
+      </div>
+      <div class="pkg-price-box">
+        <div class="price">$999 <span>USD · ciclo de 6 semanas</span></div>
+        <a class="btn-primary" href="https://www.paypal.com/ncp/payment/V5YDQ5MVW4KSU" target="_blank" rel="noopener">Empezar mi acompañamiento</a>
+      </div>
+    </div>
+
+    <div class="pkg-row">
+      <div class="pkg-card">
+        <h3>Enfoque Semanal</h3>
+        <div class="pkg-cadence">1 sesión / semana · 4 semanas</div>
+        <p class="pkg-desc">Un tema resuelto a fondo cada semana, con dirección clara de qué trabajar entre sesiones.</p>
+        <div class="price">$599 <span style="display:inline;">USD</span></div>
+        <a class="btn-secondary" href="https://www.paypal.com/ncp/payment/ADJGAFC7FQLEE" target="_blank" rel="noopener">Reservar mi enfoque semanal</a>
+      </div>
+
+      <div class="pkg-card">
+        <h3>Mock Interviews</h3>
+        <div class="pkg-cadence">Español o inglés</div>
+        <p class="pkg-desc">Simulación real de entrevista con feedback inmediato, sesión por sesión.</p>
+        <div class="price">$99 <span style="display:inline;">/ sesión</span></div>
+        <a class="btn-secondary" href="https://www.paypal.com/ncp/payment/E2WKPUB4DEC7Q" target="_blank" rel="noopener">Reservar 1 sesión</a>
+        <a class="btn-secondary" href="https://www.paypal.com/ncp/payment/HZEYRJNYAMP58" target="_blank" rel="noopener" style="margin-top:10px;">Paquete de 3 — $249</a>
+      </div>
+
+      <div class="pkg-card">
+        <h3>Sesión Express</h3>
+        <div class="pkg-cadence">Sesión única</div>
+        <p class="pkg-desc">Revisión de CV o ajuste de último momento antes de una entrevista ya agendada.</p>
+        <div class="price">$69 <span style="display:inline;">/ sesión</span></div>
+        <a class="btn-secondary" href="https://www.paypal.com/ncp/payment/DM6JP5UFLJ72N" target="_blank" rel="noopener">Reservar sesión express</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="kicker">Preguntas frecuentes</div>
+    <div id="faq-list" style="margin-top:20px;">
+
+      <div class="faq-item">
+        <button class="faq-q">¿Las sesiones serán en inglés o en español?
+          <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner"><p>Las sesiones son en español. Si tu entrevista será en inglés, también trabajamos en ese idioma para que llegues con fluidez y claridad.</p></div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">¿Puedo llevar mis propios temas a la sesión?
+          <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner"><p>Sí. Definimos juntos la agenda según lo que más te interesa, además de identificar tus gaps actuales para reforzar justo lo que necesitas.</p></div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">¿Puedo solicitar sesiones adicionales?
+          <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner"><p>Las sesiones incluidas son las de tu paquete, así que aprovechar cada una al máximo es clave. Entre sesiones recibirás material de seguimiento por escrito para seguir avanzando por tu cuenta.</p></div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">¿Qué pasa si no consigo la oferta?
+          <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner"><p>Estas sesiones no garantizan una oferta — ninguna preparación puede hacerlo. Lo que sí garantizamos es un roadmap claro de tus fortalezas y áreas de mejora, más una sesión adicional sin costo para revisar tu proceso y definir los siguientes pasos. Por eso no ofrecemos reembolsos.</p></div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">¿El proceso se adapta a mi experiencia y objetivos?
+          <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner"><p>Sí. Antes de la primera sesión compartes tu background y objetivos, así que empezamos exactamente desde donde estás.</p></div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">¿Es exclusivo para roles de iOS/mobile?
+          <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner"><p>El razonamiento técnico aplica a cualquier área (mobile, frontend, backend, etc.). El enfoque en System Design sí está orientado a mobile — es mi especialidad.</p></div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div class="footer-name">init(with mentor:) — un programa de Abner</div>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/abnercastro/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.youtube.com/@abnerabbey" target="_blank" rel="noopener">YouTube</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.faq-item');
+      var wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(function(o){ o.classList.remove('open'); });
+      if(!wasOpen){ item.classList.add('open'); }
+    });
+  });
+</script>
+
+</body>
+</html>
